@@ -61,5 +61,35 @@ ggplot(wage_gap_long, aes(x = year, y = Wage_Gap, color = Education)) +
 
 
 
+# Bar Plot: Gender Wage Gap as Percentage for the year 2022
+gap_percent <- tibble(
+  Education = factor(c("Less than HS", "High School", "Some College", 
+                       "Bachelor's Degree", "Advanced Degree"),
+                     levels = c("Less than HS", "High School", "Some College", 
+                                "Bachelor's Degree", "Advanced Degree")),
+  Gap_Percent = 100 * (c(latest_data$men_less_than_hs, latest_data$men_high_school, latest_data$men_some_college,
+                         latest_data$men_bachelors_degree, latest_data$men_advanced_degree) -
+                         c(latest_data$women_less_than_hs, latest_data$women_high_school, latest_data$women_some_college,
+                           latest_data$women_bachelors_degree, latest_data$women_advanced_degree)) /
+    c(latest_data$men_less_than_hs, latest_data$men_high_school, latest_data$men_some_college,
+      latest_data$men_bachelors_degree, latest_data$men_advanced_degree)
+)
+
+ggplot(gap_percent, aes(x = Education, y = Gap_Percent, fill = Education)) +
+  geom_bar(stat = "identity", width = 0.6) +  # narrower bars for spacing
+  labs(title = "Gender Wage Gap (Percentage, 2022)",
+       y = "Wage Gap (%)", x = "Education Level") +
+  theme_minimal(base_size = 13) +
+  theme(
+    axis.text.x = element_text(angle = 30, hjust = 1),
+    legend.position = "none",
+    plot.title = element_text(face = "bold", size = 15),
+    panel.grid.major.x = element_blank()
+  ) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))  # add top space
+
+
+
+
 
 
