@@ -88,6 +88,56 @@ ggplot(gap_percent, aes(x = Education, y = Gap_Percent, fill = Education)) +
   ) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)))  # add top space
 
+#  Linear Regression: Predicting Wages from Education & Gender
+
+# Prepare the data for modeling
+model_data <- gender_wage_long  # Already has Education, Gender, Wage
+
+# Convert Education and Gender to factors (important for modeling)
+model_data <- model_data %>%
+  mutate(
+    Education = factor(Education, levels = c("Less than HS", "High School", "Some College", "Bachelor's Degree", "Advanced Degree")),
+    Gender = factor(Gender)
+  )
+
+# Fit the linear model
+wage_model <- lm(Wage ~ Education + Gender, data = model_data)
+
+# Show model summary
+summary(wage_model)
+
+# Predicted wages from the model
+model_data$Predicted_Wage <- predict(wage_model, model_data)
+
+# Plot actual vs predicted wages with labels
+ggplot(model_data, aes(x = Education, y = Wage, fill = Gender)) +
+  # Bar plot for actual wages
+  geom_col(position = position_dodge(width = 0.9), alpha = 0.7, width = 0.7) +
+  
+  # Actual wage labels on bars
+  geom_text(aes(label = round(Wage, 0.5)),
+            position = position_dodge(width = 0.9),
+            vjust = -1.2, size = 2.3, color = "black") +
+  
+  # Predicted wage points
+  geom_point(aes(y = Predicted_Wage, color = Gender),
+             position = position_dodge(width = 0.9), shape = 21, size = 3, stroke = 1.2) +
+  
+  # Predicted wage labels near points
+  geom_text(aes(y = Predicted_Wage, label = round(Predicted_Wage, 1), group = Gender),
+            position = position_dodge(width = 0.9),
+            vjust = 2.2, size = 2.3, color = "black")
+
+# Plot labels and theme
+labs(title = "Actual vs Predicted Wages by Education and Gender (2022)",
+     subtitle = "Bars = Actual Wages | Dots = Predicted Wages from Linear Regression",
+     y = "Wage ($/hr)", x = "Education Level") +
+  scale_fill_manual(values = c("Men" = "#fca5a5", "Women" = "#7dd3fc")) +
+  scale_color_manual(values = c("Men" = "#b91c1c", "Women" = "#0369a1")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 30, hjust = 1),
+        plot.subtitle = element_text(size = 10, face = "italic"))
+
 
 
 
