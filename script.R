@@ -1,9 +1,10 @@
 # Loading necessary libraries
 library(tidyverse)
-setwd("C:/Users/CHHANDAK/Documents/wage-disparity/datasets")
+library(here)
 
-# Read the data set
-wages <- read_csv("wages_by_education.csv")
+# Read the Dataset
+wages <- read_csv(here("datasets", "wages_by_education.csv"))
+
 
 # 1️⃣ Bar Chart: Men vs Women by Education Level (2022)
 latest_data <- wages %>% filter(year == max(year))
@@ -32,3 +33,33 @@ ggplot(gender_wage_long, aes(x = Education, y = Wage, fill = Gender)) +
        x = "Education Level", y = "Average Hourly Wage") +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
+
+
+# ⿢ Line Chart: Gender Wage Gap Over Time
+wage_gap <- wages %>%
+  transmute(
+    year,
+    `Less than HS` = men_less_than_hs - women_less_than_hs,
+    `High School` = men_high_school - women_high_school,
+    `Some College` = men_some_college - women_some_college,
+    `Bachelor's Degree` = men_bachelors_degree - women_bachelors_degree,
+    `Advanced Degree` = men_advanced_degree - women_advanced_degree
+  )
+
+wage_gap_long <- wage_gap %>%
+  pivot_longer(cols = -year, names_to = "Education", values_to = "Wage_Gap")
+
+ggplot(wage_gap_long, aes(x = year, y = Wage_Gap, color = Education)) +
+  geom_line(linewidth = 1.2) +  geom_point(size = 2) + 
+  labs(
+    title = "Gender Wage Gap Over Time by Education Level",
+    x = "Year",
+    y = "Wage Gap (Men - Women, $/hr)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+
+
+
+
+
