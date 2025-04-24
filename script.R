@@ -93,7 +93,7 @@ ggplot(gap_percent, aes(x = Education, y = Gap_Percent, fill = Education)) +
        y = "Wage Gap (%)", x = "Education Level") +
   theme_minimal(base_size = 13) +
   theme(
-    axis.text.x = element_text(angle = 30, hjust = 1),
+    axis.text.x = element_text(angle = 90, hjust = 1),
     legend.position = "none",
     plot.title = element_text(face = "bold", size = 15),
     panel.grid.major.x = element_blank()
@@ -147,5 +147,5 @@ labs(title = "Actual vs Predicted Wages by Education and Gender (2022)",
   scale_fill_manual(values = c("Men" = "#fca5a5", "Women" = "#7dd3fc")) +
   scale_color_manual(values = c("Men" = "#b91c1c", "Women" = "#0369a1")) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1),
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),
         plot.subtitle = element_text(size = 10, face ="italic"))
