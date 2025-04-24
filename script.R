@@ -73,7 +73,7 @@ ggplot(wage_gap_long, aes(x = year, y = Wage_Gap, color = Education)) +
 
 
 
-# Bar Plot: Gender Wage Gap as Percentage for the year 2022
+# Bar Plot: Gender Wage Gap as Percentage for input year
 gap_percent <- tibble(
   Education = factor(c("Less than HS", "High School", "Some College", 
                        "Bachelor's Degree", "Advanced Degree"),
@@ -89,7 +89,7 @@ gap_percent <- tibble(
 
 ggplot(gap_percent, aes(x = Education, y = Gap_Percent, fill = Education)) +
   geom_bar(stat = "identity", width = 0.6) +  # narrower bars for spacing
-  labs(title = "Gender Wage Gap (Percentage, 2022)",
+  labs(title = paste("Gender Wage Gap Percentage (", input_year, ")", sep = ""),
        y = "Wage Gap (%)", x = "Education Level") +
   theme_minimal(base_size = 13) +
   theme(
@@ -138,14 +138,14 @@ ggplot(model_data, aes(x = Education, y = Wage, fill = Gender)) +
   # Predicted wage labels near points
   geom_text(aes(y = Predicted_Wage, label = round(Predicted_Wage, 1), group = Gender),
             position = position_dodge(width = 0.9),
-            vjust = 2.2, size = 2.3, color = "black")
+            vjust = 3, size = 2.3, color = "black")
 
 # Plot labels and theme
-labs(title = "Actual vs Predicted Wages by Education and Gender (2022)",
+labs(title = "Actual vs Predicted Wages by Education and Gender",
      subtitle = "Bars = Actual Wages | Dots = Predicted Wages from Linear Regression",
      y = "Wage ($/hr)", x = "Education Level") +
   scale_fill_manual(values = c("Men" = "#fca5a5", "Women" = "#7dd3fc")) +
-  scale_color_manual(values = c("Men" = "#b91c1c", "Women" = "#0369a1")) +
+  scale_color_manual(values = c("Men" = "#b91c0a", "Women" = "#0369a1")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         plot.subtitle = element_text(size = 10, face ="italic"))
