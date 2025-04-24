@@ -7,7 +7,16 @@ wages <- read_csv(here("datasets", "wages_by_education.csv"))
 
 
 # 1️⃣ Bar Chart: Men vs Women by Education Level (2022)
-latest_data <- wages %>% filter(year == max(year))
+available_years <- unique(wages$year)
+cat("Available years:", paste(available_years, collapse = ", "), "\n")
+input_year <- as.integer(readline(prompt = "Enter the year you want to view data for: "))
+
+# 🔍 Validate and Filter
+if (!(input_year %in% available_years)) {
+  stop("Invalid year entered. Please choose from the available years.")
+}
+
+latest_data <- wages %>% filter(year == input_year)
 
 gender_wage_data <- tibble(
   Education = c("Less than HS", "High School", "Some College", 
@@ -29,8 +38,11 @@ gender_wage_long <- gender_wage_data %>%
 
 ggplot(gender_wage_long, aes(x = Education, y = Wage, fill = Gender)) +
   geom_bar(stat = "identity", position = "dodge") +
-  labs(title = "Wages by Gender and Education (2022)",
-       x = "Education Level", y = "Average Hourly Wage") +
+  labs(
+    title = paste("Average Hourly Wages by Gender and Education Level (", input_year, ")", sep = ""),
+    x = "Highest Educational Attainment",
+    y = "Hourly Wage (in USD)"
+  ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
 
@@ -86,12 +98,12 @@ ggplot(gap_percent, aes(x = Education, y = Gap_Percent, fill = Education)) +
     plot.title = element_text(face = "bold", size = 15),
     panel.grid.major.x = element_blank()
   ) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))  # add top space
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
 
 #  Linear Regression: Predicting Wages from Education & Gender
 
 # Prepare the data for modeling
-model_data <- gender_wage_long  # Already has Education, Gender, Wage
+model_data <- gender_wage_long
 
 # Convert Education and Gender to factors (important for modeling)
 model_data <- model_data %>%
@@ -137,9 +149,3 @@ labs(title = "Actual vs Predicted Wages by Education and Gender (2022)",
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1),
         plot.subtitle = element_text(size = 10, face ="italic"))
-
-
-
-
-
-
