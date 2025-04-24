@@ -136,7 +136,7 @@ labs(title = "Actual vs Predicted Wages by Education and Gender (2022)",
   scale_color_manual(values = c("Men" = "#b91c1c", "Women" = "#0369a1")) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 30, hjust = 1),
-        plot.subtitle = element_text(size = 10, face = "italic"))
+        plot.subtitle = element_text(size = 10, face ="italic"))
 
 
 
