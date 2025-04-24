@@ -1,17 +1,16 @@
-# Loading necessary libraries
+
 library(tidyverse)
 library(here)
 
-# Read the Dataset
 wages <- read_csv(here("datasets", "wages_by_education.csv"))
 
 
-# 1️⃣ Bar Chart: Men vs Women by Education Level (2022)
+#  Bar Chart: Men vs Women by Education Level (2022)
 available_years <- unique(wages$year)
 cat("Available years:", paste(available_years, collapse = ", "), "\n")
 input_year <- as.integer(readline(prompt = "Enter the year you want to view data for: "))
 
-# 🔍 Validate and Filter
+# Validate and Filter
 if (!(input_year %in% available_years)) {
   stop("Invalid year entered. Please choose from the available years.")
 }
@@ -47,7 +46,7 @@ ggplot(gender_wage_long, aes(x = Education, y = Wage, fill = Gender)) +
   theme(axis.text.x = element_text(angle = 90, hjust = 0.8))
 
 
-# ⿢ Line Chart: Gender Wage Gap Over Time
+#Line Chart: Gender Wage Gap Over Time
 wage_gap <- wages %>%
   transmute(
     year,
@@ -100,9 +99,9 @@ ggplot(gap_percent, aes(x = Education, y = Gap_Percent, fill = Education)) +
   ) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)))
 
-#  Linear Regression: Predicting Wages from Education & Gender
+# Linear Regression: Predicting Wages from Education & Gender
 
-# Prepare the data for modeling
+#Prepare the data for modeling
 model_data <- gender_wage_long
 
 # Convert Education and Gender to factors (important for modeling)
