@@ -2,11 +2,10 @@
 library(tidyverse)
 library(here)
 
-# Read the Dataset
 wages <- read_csv(here("datasets", "wages_by_education.csv"))
 
 
-# 1️⃣ Bar Chart: Men vs Women by Education Level (2022)
+#Bar Chart: Men vs Women by Education Level (2022)
 latest_data <- wages %>% filter(year == max(year))
 
 gender_wage_data <- tibble(
@@ -35,7 +34,7 @@ ggplot(gender_wage_long, aes(x = Education, y = Wage, fill = Gender)) +
   theme(axis.text.x = element_text(angle = 30, hjust = 1))
 
 
-# ⿢ Line Chart: Gender Wage Gap Over Time
+#Line Chart: Gender Wage Gap Over Time
 wage_gap <- wages %>%
   transmute(
     year,
@@ -61,7 +60,7 @@ ggplot(wage_gap_long, aes(x = year, y = Wage_Gap, color = Education)) +
 
 
 
-# Bar Plot: Gender Wage Gap as Percentage for the year 2022
+#Bar Plot: Gender Wage Gap as Percentage for the year 2022
 gap_percent <- tibble(
   Education = factor(c("Less than HS", "High School", "Some College", 
                        "Bachelor's Degree", "Advanced Degree"),
@@ -88,25 +87,23 @@ ggplot(gap_percent, aes(x = Education, y = Gap_Percent, fill = Education)) +
   ) +
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)))  # add top space
 
-#  Linear Regression: Predicting Wages from Education & Gender
+# Linear Regression: Predicting Wages from Education & Gender
 
-# Prepare the data for modeling
+#Prepare the data for modeling
 model_data <- gender_wage_long  # Already has Education, Gender, Wage
 
-# Convert Education and Gender to factors (important for modeling)
+#Convert Education and Gender to factors (important for modeling)
 model_data <- model_data %>%
   mutate(
     Education = factor(Education, levels = c("Less than HS", "High School", "Some College", "Bachelor's Degree", "Advanced Degree")),
     Gender = factor(Gender)
   )
 
-# Fit the linear model
+#Fit the linear model
 wage_model <- lm(Wage ~ Education + Gender, data = model_data)
 
-# Show model summary
 summary(wage_model)
 
-# Predicted wages from the model
 model_data$Predicted_Wage <- predict(wage_model, model_data)
 
 # Plot actual vs predicted wages with labels
