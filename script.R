@@ -44,7 +44,7 @@ ggplot(gender_wage_long, aes(x = Education, y = Wage, fill = Gender)) +
     y = "Hourly Wage (in USD)"
   ) +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 30, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 0.8))
 
 
 # ⿢ Line Chart: Gender Wage Gap Over Time
